@@ -1,24 +1,23 @@
 import requests, json
+from pymongo import MongoClient
 
-response = requests.get('https://api.github.com/users?since=0&page=1&per_page=100&client_id=####&client_secret=####')
+client = MongoClient()
+database = client['cf_project']
+users = database['users']
 
-file = open('users1.dat', 'w')
-
+response = requests.get('https://api.github.com/users?since=0&page=1&per_page=100&client_id=84690af0552c9ed4357b&client_secret=288d95782c060102e5f251cd880a386feef1d835')
 count = 0
 
 while(response.ok):
-	print(count+1)
 	link = response.headers.get('link',None)
 	item = json.loads(response.text or response.content)
-	file.write(str(item) + "\n")
-	if(count == 100): 
-		print("ratelimit left : ")
-		print(response.headers.get("x-ratelimit-remaining", None))
+	for user in item:
+		users.update(user, user, upsert = True)
+	print(count)
+	if(count % 100 == 0): 
+		print("Ratelimit Left : {0}").format(response.headers.get("x-ratelimit-remaining", None))
 		break
 	if(link is not None):
 		count += 1
 		link = link.split(">")[0][1:]
 		response = requests.get(link)
-
-print(response)
-file.close()
