@@ -5,7 +5,7 @@ client = MongoClient()
 database = client['cf_project']
 users = database['users']
 
-response = requests.get('https://api.github.com/users?since=0&page=1&per_page=100&client_id=84690af0552c9ed4357b&client_secret=288d95782c060102e5f251cd880a386feef1d835')
+response = requests.get('https://api.github.com/users?since=0&page=1&per_page=100&client_id=XXXXXXXXXXXXXXXXXXXXXXXXXXXX&client_secret=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
 count = 0
 
 while(response.ok):

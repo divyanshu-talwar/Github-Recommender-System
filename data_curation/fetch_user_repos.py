@@ -12,7 +12,7 @@ globalCounter = 0
 for document in users.find():
 	count = 0
 	print(document['repos_url'])
-	response = requests.get(document['repos_url'] + "?page=1&per_page=100&client_id=84690af0552c9ed4357b&client_secret=288d95782c060102e5f251cd880a386feef1d835")
+	response = requests.get(document['repos_url'] + "?page=1&per_page=100&client_id=XXXXXXXXXXXXXXXXXXXXXXXXXXXXX&client_secret=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
 	lastPage = 0
 	if( globalCounter % 100 == 0 ):
 		print("Ratelimit Left : {0}").format(response.headers.get("x-ratelimit-remaining", None))

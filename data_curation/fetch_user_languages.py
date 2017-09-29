@@ -12,7 +12,7 @@ cursor = userRepos.find(timeout = False)
 
 for document in cursor:
 	if( count >= 19474 ):
-		response = requests.get(document['languages_url'] + "?client_id=84690af0552c9ed4357b&client_secret=288d95782c060102e5f251cd880a386feef1d835")
+		response = requests.get(document['languages_url'] + "?client_id=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&client_secret=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
 		# response can be empty which signifies that the repository may be forked and user has not contributed anything to the repositorys
 		if( response.ok ):
 			item = json.loads(response.text or response.content)
