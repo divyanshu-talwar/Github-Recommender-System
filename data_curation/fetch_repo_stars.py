@@ -4,15 +4,15 @@ from pymongo import MongoClient
 client = MongoClient()
 database = client['cf_project']
 userRepos = database['userRepos']
-repoForks = database['repoForks']
+repoStars = database['repoStars']
 
 response = None
 globalCounter = 0
-cursor = users.find(timeout = False)
+cursor = userRepos.find(timeout = False)
 
 for document in cursor:
 	count = 1
-	response = requests.get(document['forks_url'] + "?page=1&per_page=100&client_id=84690af0552c9ed4357b&client_secret=288d95782c060102e5f251cd880a386feef1d835")
+	response = requests.get(document['stargazers_url'] + "?page=1&per_page=100&client_id=84690af0552c9ed4357b&client_secret=288d95782c060102e5f251cd880a386feef1d835")
 	# response can be empty which signifies that the repository may be forked and user has not contributed anything to the repositories
 	lastPage = 0
 	result = dict()
@@ -32,9 +32,9 @@ for document in cursor:
 				lastPage = int(values[1].split("?")[1].split("&")[0][5:])
 		item = json.loads(response.text or response.content)
 		if( len(item) != 0 ):
-			for repo in item:
-				ownerID.append(repo['owner']['id'])
-				ownerLogin.append(repo['owner']['login'])
+			for user in item:
+				ownerID.append(user['id'])
+				ownerLogin.append(user['login'])
 		if( link is not None and count < lastPage ):
 			count += 1
 			link = link.split(">")[0][1:]
@@ -44,7 +44,7 @@ for document in cursor:
 		else:
 			result['user_id'] = ownerID
 			result['login'] = ownerLogin
-			repoForks.update(result, result, upsert = True)
+			repoStars.update(result, result, upsert = True)
 			break
 	print(globalCounter)
 	globalCounter += 1
