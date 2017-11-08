@@ -3,14 +3,22 @@ from pymongo import MongoClient
 
 client = MongoClient()
 database = client['cf_project']
+users = database['users']
 userRepos = database['userRepos']
-userLangs = database['userLangs']
+userLangs = database['userLangsSmall']
+
+users_names = users.find(timeout = False).limit(1000)
 
 response = None
 count = 0
-cursor = userRepos.find(timeout = False)
 
-for document in cursor:
+for user_document in users_names:
+	document = userRepos.find({'user_id' : user_document['id'] }).limit(1)
+	if( document.count() == 0 ):
+		print(count)
+		count += 1
+		continue
+	document = document[0]
 	response = requests.get(document['languages_url'] + "?client_id=84690af0552c9ed4357b&client_secret=288d95782c060102e5f251cd880a386feef1d835")
 	# response can be empty which signifies that the repository may be forked and user has not contributed anything to the repositories
 	if( response.ok ):
@@ -27,4 +35,4 @@ for document in cursor:
 	print(count)
 	count += 1
 
-cursor.close()
+users_names.close()
