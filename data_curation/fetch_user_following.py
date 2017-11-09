@@ -4,11 +4,11 @@ from pymongo import MongoClient
 client = MongoClient()
 database = client['cf_project']
 users = database['users']
-userFollowing = database['userFollowing']
+userFollowing = database['userFollowingSmall']
 
 response = None
 globalCounter = 0
-cursor = users.find(timeout = False)
+cursor = users.find(timeout = False).limit(1000)
 
 for document in cursor:
 	count = 1
