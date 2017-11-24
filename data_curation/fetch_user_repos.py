@@ -16,6 +16,9 @@ for document in users.find():
 	lastPage = 0
 	if( globalCounter % 100 == 0 ):
 		print("Ratelimit Left : {0}").format(response.headers.get("x-ratelimit-remaining", None))
+		if( response.headers.get("x-ratelimit-remaining", None) == '0' ):
+			print("Ratelimit reached!!!!")
+			break
 	while(response.ok):
 		link = response.headers.get('link', None)
 		if( link is not None ):
